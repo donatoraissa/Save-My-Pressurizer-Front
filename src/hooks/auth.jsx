@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { api } from '../services/api';
 
@@ -12,6 +12,9 @@ function AuthProvider({ children }) {
       const response = await api.post("/sessions", { email, password });
       const { user, token } = response.data;
 
+      localStorage.setItem("@savemypressurizer:user", JSON.stringify(user));
+      localStorage.setItem("@savemypressurizer:token", token);
+
       api.defaults.headers.authorization = `Bearer ${token}`;
       setData({ user, token })
     } catch(error) {
@@ -22,8 +25,34 @@ function AuthProvider({ children }) {
       }
     }
   }
+
+  async function signOut() {
+    localStorage.removeItem("@savemypressurizer:user");
+    localStorage.removeItem("@savemypressurizer:token");
+
+    setData({});
+  }
+
+  useEffect(() => {
+    const user = localStorage.getItem("@savemypressurizer:user");
+    const token = localStorage.getItem("@savemypressurizer:token");
+
+    if(user && token) {
+      api.defaults.headers.authorization = `Beares ${token}`;
+
+      setData({
+        token,
+        user: JSON.parse(user)
+      });
+    }
+
+  }, [])
   return (
-    <AuthContext.Provider value={{signIn, user: data.user}}>
+    <AuthContext.Provider value={{
+      signIn,
+      signOut,
+      user: data.user
+      }}>
       {children}
     </AuthContext.Provider>
   )
