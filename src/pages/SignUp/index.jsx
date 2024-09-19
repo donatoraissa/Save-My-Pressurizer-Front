@@ -35,7 +35,7 @@ export function SignUp() {
     api.post("/users", { name, email, password })
       .then(() => {
         alert("Cadastro realizado com sucesso!");
-        navigate("/home")
+        navigate("/")
       })
       .catch(error => {
         if(error.response) {

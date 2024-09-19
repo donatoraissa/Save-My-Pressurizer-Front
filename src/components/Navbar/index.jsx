@@ -11,7 +11,7 @@ export function Navbar() {
       <h1>save my pressurizer</h1>
       
       <section>
-        <ButtonText title='Home' onClick={() => navigate("/home")} />
+        <ButtonText title='Home' onClick={() => navigate("/")} />
         <ButtonText title='Map' onClick={() => navigate("/map")} />
         <ButtonText title='Users' onClick={() => navigate("/users")} />
         <ButtonText title='Add user' onClick={() => navigate("/add")}  />
