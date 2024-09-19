@@ -15,7 +15,7 @@ function AuthProvider({ children }) {
       localStorage.setItem("@savemypressurizer:user", JSON.stringify(user));
       localStorage.setItem("@savemypressurizer:token", token);
 
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      api.defaults.headers.common['Authorization'] = `Beares ${token}`;
       setData({ user, token })
     } catch(error) {
       if(error.response) {
@@ -38,7 +38,7 @@ function AuthProvider({ children }) {
     const token = localStorage.getItem("@savemypressurizer:token");
 
     if(user && token) {
-      api.defaults.headers.authorization = `Beares ${token}`;
+      api.defaults.headers.common['Authorization'] = `Beares ${token}`;
 
       setData({
         token,
