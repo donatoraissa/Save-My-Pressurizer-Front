@@ -1,10 +1,11 @@
+import { forwardRef } from "react";
 import { Container } from "./styles";
 
-export function Input({ icon: Icon, height='56px', ...rest }) {
+export const Input = forwardRef(({ icon: Icon, height = '56px', ...rest }, ref) => {
   return (
-    <Container style={height={height}}>
+    <Container style={{ height }}>
       {Icon && <Icon size={20} />}
-      <input {...rest} />
+      <input ref={ref} {...rest} />
     </Container>
-  )
-}
+  );
+});

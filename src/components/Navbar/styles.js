@@ -27,3 +27,13 @@ border-bottom-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
   gap: 80px;
 }
 `;
+
+export const Logout = styled.button`
+  border: none;
+  background: none;
+
+  > svg {
+    color: ${({theme}) => theme.COLORS.WHITE};
+    font-size: 25px;
+  }
+`;
