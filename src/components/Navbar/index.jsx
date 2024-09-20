@@ -12,6 +12,11 @@ export function Navbar() {
 
   const {signOut} = useAuth();
 
+  function handleSignOut() {
+    signOut();
+    navigate("/");
+  }
+
   return(
     <Container>
       <h1>save my pressurizer</h1>
@@ -22,7 +27,7 @@ export function Navbar() {
         <ButtonText title='Users' onClick={() => navigate("/users")} />
         <ButtonText title='Add user' onClick={() => navigate("/add")}  />
 
-        <Logout onClick={signOut}>
+        <Logout onClick={handleSignOut}>
           <RiShutDownLine />
         </Logout>
       </section>
