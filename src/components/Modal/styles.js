@@ -20,7 +20,7 @@ export const ModalContent = styled.div`
   padding: 50px;
   border-radius: 8px;
   width: 800px;
-  height: 800px;
+  height: fit-content;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -34,12 +34,14 @@ export const ModalContent = styled.div`
   div {
     width: 100%;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   p {
     color: ${({ theme }) => theme.COLORS.BACKGROUND_900};
     font-size: 25px;
-    font-weight: bold;
     margin-bottom: 10px;
   }
 

@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModalWrapper, ModalContent, CloseButton } from './styles';
 
-import { Input } from '../Input';
-import { Button } from "..//Button";
 import { ButtonIcon } from "../ButtonIcon";
 
 import { FiX, FiTrash } from "react-icons/fi";
+import { api } from '../../services/api';
 
-export function Modal ({ isOpen, onClose }) {
+import { formatDate } from "../../utils/formatDate";
+
+export function Modal ({ isOpen, onClose, userId }) {
+  const [clientData, setClientData] = useState(null);
+
   if (!isOpen) return null;
+
+  useEffect(() => {
+    async function fetchClient() {
+      const response = await api.get(`/clientes/${userId}`);
+      setClientData(response.data);
+    }
+
+    fetchClient();
+  }, [userId])
+
+  console.log(clientData)
 
   return (
     <ModalWrapper>
@@ -17,29 +31,17 @@ export function Modal ({ isOpen, onClose }) {
           <FiX size={30}></FiX>
         </CloseButton>
         <h1>Informações do Cliente</h1>
-        <div>
-          <p>Nome</p>
-          <Input />
-        </div>
-        <div>
-          <p>Telefone</p>
-          <Input />
-        </div>
-        <div>
-          <p>Endereço</p>
-          <Input />
-        </div>
-        <div>
-          <p>Data de instação</p>
-          <Input />
-        </div>
-        <div>
-          <p>Status</p>
-          <Input />
-        </div>
+        {clientData && (
+          <div>
+            <p><strong>Nome:</strong> {clientData.cliente.first_name} {clientData.cliente.last_name}</p>  
+            <p><strong>Telefone:</strong> {clientData.cliente.phone}</p>
+            <p><strong>Endereço:</strong> {clientData.cliente.street}, {clientData.cliente.number} - {clientData.cliente.complement}</p>
+            <p><strong>Data de instalação:</strong> {formatDate(clientData.cliente.installation_date)}</p>
+            <p><strong>Status:</strong> Ligado</p>
+          </div>
+        )}
 
         <footer>
-          <Button title='Editar' />
           <ButtonIcon icon={FiTrash}/>
         </footer>
         

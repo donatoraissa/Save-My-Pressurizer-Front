@@ -1,7 +1,6 @@
 import { Container, Content, CustomTableContainer, CustomTableCell } from "./styles";
 import React, { useEffect, useState } from 'react';
 
-import { Input } from "../../components/Input";
 import { Navbar } from "../../components/Navbar";
 import { Modal } from '../../components/Modal'
 
@@ -9,41 +8,23 @@ import { Table, TableBody, TableHead, TableRow, Button } from '@mui/material';
 
 import { api } from "../../services/api";
 
+import { formatDate } from "../../utils/formatDate";
+import { getStatusColor } from "../../utils/getStatusColor";
+
 export function Users() {
     const [clients, setClients] = useState([]);
+    const [userId, setUserId] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleMarkerClick = () => {
+    const handleMarkerClick = (id) => {
+        setUserId(id);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
     };
-
-    function formatDate(date) {
-        const dateFormatted = new Date(date).toLocaleDateString(
-            'pt-BR',
-            {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            }
-        );
-        return dateFormatted;
-    }
-
-    function getStatusColor(status) {
-        switch(status.toUpperCase()) {
-            case 'LIGADO':
-                return 'green';
-            case 'DESLIGADO':
-                return 'red';
-            case 'BLOQUEADO':
-                return 'gray';
-        } 
-    }
 
     useEffect(() => {
         async function fetchClients() {
@@ -73,39 +54,39 @@ export function Users() {
                     <TableBody>
                     {clients.map((item) => (
                         <TableRow key={item.id}>
-                        <CustomTableCell>{item.id}</CustomTableCell>
-                        <CustomTableCell>
-                            <span style={{ 
-                            backgroundColor: getStatusColor('ligado'), 
-                            color: '#fff', 
-                            padding: '5px 10px', 
-                            borderRadius: '5px',
-                            fontWeight: 'bold',
-                            width: '100px',
-                            height: '30px',
-                            display: 'flex', 
-                            justifyContent: 'center', 
-                            alignItems: 'center'
-                            }}>
-                            Ligado
-                            </span>
-                        </CustomTableCell>
-                        <CustomTableCell>{`${item.first_name} ${item.last_name}`}</CustomTableCell>
-                        <CustomTableCell>{formatDate(item.installation_date)}</CustomTableCell>
-                        <CustomTableCell>
-                            <Button
-                                title="Ver Mais"
-                                style={{ backgroundColor: '#1438B8',
-                                    color: 'white',
-                                    borderRadius: '5px',
-                                    padding: '10px 20px',
-                                    border: 'none',
-                                    cursor: 'pointer' }}
-                                onClick={handleMarkerClick}
-                                >
-                                Ver Mais
-                            </Button>
-                        </CustomTableCell>
+                            <CustomTableCell>{item.id}</CustomTableCell>
+                            <CustomTableCell>
+                                <span style={{ 
+                                backgroundColor: getStatusColor('ligado'), 
+                                color: '#fff', 
+                                padding: '5px 10px', 
+                                borderRadius: '5px',
+                                fontWeight: 'bold',
+                                width: '100px',
+                                height: '30px',
+                                display: 'flex', 
+                                justifyContent: 'center', 
+                                alignItems: 'center'
+                                }}>
+                                Ligado
+                                </span>
+                            </CustomTableCell>
+                            <CustomTableCell>{`${item.first_name} ${item.last_name}`}</CustomTableCell>
+                            <CustomTableCell>{formatDate(item.installation_date)}</CustomTableCell>
+                            <CustomTableCell>
+                                <Button
+                                    title="Ver Mais"
+                                    style={{ backgroundColor: '#1438B8',
+                                        color: 'white',
+                                        borderRadius: '5px',
+                                        padding: '10px 20px',
+                                        border: 'none',
+                                        cursor: 'pointer' }}
+                                    onClick={() => handleMarkerClick(item.id)}
+                                    >
+                                    Ver Mais
+                                </Button>
+                            </CustomTableCell>
                         </TableRow>
                     ))}
                     </TableBody>
@@ -116,6 +97,7 @@ export function Users() {
                     <Modal 
                         isOpen={isModalOpen}
                         onClose={closeModal}
+                        userId={userId}
                     />}
 
             </Content>
