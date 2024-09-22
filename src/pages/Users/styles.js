@@ -31,7 +31,7 @@ export const Content = styled.div`
   box-sizing: border-box;
 `;
 
-const CustomTableContainer = styled(TableContainer)`
+export const CustomTableContainer = styled(TableContainer)`
   background-color: #F4EDE8;
   font-family: 'Roboto Slab', sans-serif;
   border: 2px solid #1438B8;
