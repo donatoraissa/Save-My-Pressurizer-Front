@@ -13,7 +13,7 @@ import { getStatusColor } from "../../utils/getStatusColor";
 
 export function Users() {
     const [clients, setClients] = useState([]);
-    const [userId, setUserId] = useState(null);
+    const [clientId, setUserId] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -97,7 +97,7 @@ export function Users() {
                     <Modal 
                         isOpen={isModalOpen}
                         onClose={closeModal}
-                        userId={userId}
+                        clientId={clientId}
                     />}
 
             </Content>
