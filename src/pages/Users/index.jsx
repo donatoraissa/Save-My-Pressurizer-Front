@@ -1,26 +1,17 @@
 import { Container, Content, CustomTableContainer, CustomTableCell } from "./styles";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Input } from "../../components/Input";
 import { Navbar } from "../../components/Navbar";
 import { Modal } from '../../components/Modal'
 
-import { Table, TableBody, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Table, TableBody, TableHead, TableRow, Button } from '@mui/material';
 
-// Dados para a testar a tabela (Remover depois)
-const data = [
-    { id: 1, status: 'Ligado', name: 'XXXXXXXXXXXXX', installation: '01/01/2024', color: 'green' },
-    { id: 2, status: 'Ligado', name: 'XXXXXXXXXXXXX', installation: '01/02/2024', color: 'green' },
-    { id: 3, status: 'Desligado', name: 'XXXXXXXXXXXXX', installation: '01/03/2024', color: 'red' },
-    { id: 4, status: 'Ligado', name: 'XXXXXXXXXXXXX', installation: '01/04/2024', color: 'green' },
-    { id: 5, status: 'Bloqueado', name: 'XXXXXXXXXXXXX', installation: '01/05/2024', color: 'gray' },
-    { id: 6, status: 'Ligado', name: 'XXXXXXXXXXXXX', installation: '01/06/2024', color: 'green' },
-    { id: 7, status: 'Desligado', name: 'XXXXXXXXXXXXX', installation: '01/07/2024', color: 'red' },
-    { id: 8, status: 'Ligado', name: 'XXXXXXXXXXXXX', installation: '01/08/2024', color: 'green' },
-    { id: 9, status: 'Ligado', name: 'XXXXXXXXXXXXX', installation: '01/08/2024', color: 'green' },
-  ];
+import { api } from "../../services/api";
 
 export function Users() {
+    const [clients, setClients] = useState([]);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleMarkerClick = () => {
@@ -31,47 +22,76 @@ export function Users() {
         setIsModalOpen(false);
     };
 
+    function formatDate(date) {
+        const dateFormatted = new Date(date).toLocaleDateString(
+            'pt-BR',
+            {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }
+        );
+        return dateFormatted;
+    }
+
+    function getStatusColor(status) {
+        switch(status.toUpperCase()) {
+            case 'LIGADO':
+                return 'green';
+            case 'DESLIGADO':
+                return 'red';
+            case 'BLOQUEADO':
+                return 'gray';
+        } 
+    }
+
+    useEffect(() => {
+        async function fetchClients() {
+            const response = await api.get('/clientes');
+            setClients(response.data);
+        }
+
+        fetchClients();
+    }, [])
+
+
     return (
         <Container>
             <Navbar />
             <Content>
-                {/* Input de busca */}
-                <Input placeholder="Busca" />
-
-                {/* Tabela de usuários */}
                 <CustomTableContainer>
                 <Table>
                     <TableHead>
                     <TableRow>
                         <CustomTableCell>ID</CustomTableCell>
                         <CustomTableCell>Status</CustomTableCell>
-                        <CustomTableCell>Name</CustomTableCell>
-                        <CustomTableCell>Instalação</CustomTableCell>
+                        <CustomTableCell>Nome</CustomTableCell>
+                        <CustomTableCell>Data de Instalação</CustomTableCell>
                         <CustomTableCell>Ações</CustomTableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {data.map((item) => (
+                    {clients.map((item) => (
                         <TableRow key={item.id}>
                         <CustomTableCell>{item.id}</CustomTableCell>
                         <CustomTableCell>
                             <span style={{ 
-                            backgroundColor: item.color, 
+                            backgroundColor: getStatusColor('ligado'), 
                             color: '#fff', 
                             padding: '5px 10px', 
                             borderRadius: '5px',
                             fontWeight: 'bold',
-                            width: '100px',  // Largura fixa
-                            height: '30px',  // Altura fixa
+                            width: '100px',
+                            height: '30px',
                             display: 'flex', 
                             justifyContent: 'center', 
                             alignItems: 'center'
                             }}>
-                            {item.status}
+                            Ligado
                             </span>
                         </CustomTableCell>
-                        <CustomTableCell>{item.name}</CustomTableCell>
-                        <CustomTableCell>{item.installation}</CustomTableCell>
+                        <CustomTableCell>{`${item.first_name} ${item.last_name}`}</CustomTableCell>
+                        <CustomTableCell>{formatDate(item.installation_date)}</CustomTableCell>
                         <CustomTableCell>
                             <Button
                                 title="Ver Mais"
