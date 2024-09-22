@@ -1,11 +1,11 @@
-import { Container, Content, CustomCustomTableContainer, CustomTableCell } from "./styles";
+import { Container, Content, CustomTableContainer, CustomTableCell } from "./styles";
 import React, { useState } from 'react';
 
 import { Input } from "../../components/Input";
 import { Navbar } from "../../components/Navbar";
 import { Modal } from '../../components/Modal'
 
-import { Table, TableBody, CustomTableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Table, TableBody, TableHead, TableRow, Paper, Button } from '@mui/material';
 
 // Dados para a testar a tabela (Remover depois)
 const data = [
