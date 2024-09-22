@@ -7,22 +7,32 @@ import { FiX, FiTrash } from "react-icons/fi";
 import { api } from '../../services/api';
 
 import { formatDate } from "../../utils/formatDate";
+import { useNavigate } from 'react-router-dom';
 
-export function Modal ({ isOpen, onClose, userId }) {
+export function Modal ({ isOpen, onClose, clientId }) {
   const [clientData, setClientData] = useState(null);
+
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
+  async function handleRemove() {
+    const confirm = window.confirm("Deseja realmente excluir o cliente?");
+
+    if(confirm) {
+      await api.delete(`/clientes/${clientId}`);
+      navigate("/users");
+    }
+  }
+
   useEffect(() => {
     async function fetchClient() {
-      const response = await api.get(`/clientes/${userId}`);
+      const response = await api.get(`/clientes/${clientId}`);
       setClientData(response.data);
     }
 
     fetchClient();
-  }, [userId])
-
-  console.log(clientData)
+  }, [clientId])
 
   return (
     <ModalWrapper>
@@ -30,6 +40,7 @@ export function Modal ({ isOpen, onClose, userId }) {
         <CloseButton onClick={onClose}>
           <FiX size={30}></FiX>
         </CloseButton>
+        
         <h1>Informações do Cliente</h1>
         {clientData && (
           <div>
@@ -42,7 +53,10 @@ export function Modal ({ isOpen, onClose, userId }) {
         )}
 
         <footer>
-          <ButtonIcon icon={FiTrash}/>
+          <ButtonIcon
+            icon={FiTrash}
+            onClick={handleRemove}  
+          />
         </footer>
         
       </ModalContent>
