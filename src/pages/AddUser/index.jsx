@@ -28,6 +28,7 @@ const addUserSchema = z.object({
   phoneNumber: z.string().refine((val) => val.length === 11, {
     message: "O número de telefone precisa ter 11 dígitos!"
   }),
+  complement: z.string().min(1, "O complemento é obrigatório!"),
   installationDate: z.string().refine(val => !isNaN(Date.parse(val)), {
     message: "Insira uma data válida!"
   }),
@@ -59,13 +60,13 @@ export function AddUser() {
       first_name: name,
       last_name: lastName,
       cpf: cpf,
-      email: email,
+      email: email.toString(),
       phone: phoneNumber,
       postal_code: cep,
       street: street,
-      number: addressNumber,
+      number: Number(addressNumber),
       complement: complement,
-      installation_date: installationDate
+      installation_date: Date(installationDate)
     }).then(() => {
       alert("Cliente cadastrado com sucesso!");
       navigate("/");
@@ -99,7 +100,6 @@ export function AddUser() {
           <InputWrapper>
             <Input
               placeholder='CEP'
-              type="number"
               icon={FiMap}
               height="80px"
               {...register("cep")}
@@ -139,7 +139,6 @@ export function AddUser() {
           <InputWrapper>
             <Input
               placeholder='CPF'
-              type="number"
               icon={FiUser}
               height="80px"
               {...register("cpf")}
