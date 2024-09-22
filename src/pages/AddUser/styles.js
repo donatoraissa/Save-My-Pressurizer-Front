@@ -17,13 +17,13 @@ export const Container = styled.div`
   }
 `;
 
-export const Content = styled.div`
+export const ContentForm = styled.form`
   max-width: 550px;
   margin: 0 auto;
 
   display: grid;
   grid-template-columns: repeat(2, 450px);
-  grid-template-rows: repeat(5, 55px);
+  grid-template-rows: repeat(5, fit-content);
 
   gap: 50px;
   justify-content: center;
@@ -41,3 +41,8 @@ export const Content = styled.div`
     }
   }
 `;
+
+export const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
