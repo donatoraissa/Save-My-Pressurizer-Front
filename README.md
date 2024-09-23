@@ -44,7 +44,9 @@ Para rodar o projeto localmente, siga os passos abaixo:
    ```bash
    npm run dev
 
-O aplicativo será iniciado em [http://localhost:3000](http://localhost:3000).
+Após isso, no terminal, aparecerá onde o aplicativo será iniciado.
+
+Dependendo da porta queo back estiver rodando, você deve mudar a baseUrl no arquivo api.js.
 
 ## Estrutura de Pastas
 
