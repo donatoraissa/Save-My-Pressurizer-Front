@@ -13,7 +13,7 @@ Este projeto faz parte do trabalho de conclusão de curso (TCC) "Save My Pressur
 - **React Modal**: Para exibir modais e janelas de diálogo.
 - **React Leaflet**: Para exibir mapas interativos dentro da aplicação.
 - **React Geocode**: Para conversão de coordenadas geográficas em endereços, auxiliando na localização dos pressurizadores.
-- **CORS**: Configurado para permitir a comunicação segura entre o frontend e o backend.
+- **Axios**: Para conexão com o backend e realização de requisições HTTP.
 
 ## Funcionalidades
 
