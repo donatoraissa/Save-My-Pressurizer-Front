@@ -13,8 +13,8 @@ export function Navbar() {
   const {signOut} = useAuth();
 
   function handleSignOut() {
-    signOut();
     navigate("/");
+    signOut();
   }
 
   return(
