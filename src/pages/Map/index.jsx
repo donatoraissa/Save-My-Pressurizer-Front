@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Navbar } from '../../components/Navbar';
 import { Content, MapWrapper } from './styles';
-import { Modal } from '../../components/Modal'
+import { Modal } from '../../components/Modal';
+import { api } from '../../services/api';
 
 const customIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
@@ -15,19 +15,56 @@ const customIcon = new L.Icon({
   `),
   iconSize: [60, 60],
   iconAnchor: [12, 24],
-  popupAnchor: [0, -24]
+  popupAnchor: [0, -24],
 });
 
 export function Map() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clients, setClients] = useState([]);
+  const [clientId, setClientId] = useState(null);
+  const [positions, setPositions] = useState({});
 
-  const handleMarkerClick = () => {
+  const handleMarkerClick = (clientId) => {
+    setClientId(clientId);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    async function fetchClients() {
+      const response = await api.get('/clientes');
+      setClients(response.data);
+      response.data.forEach(async (client) => {
+        const position = await getPosition(client.street, client.number);
+        if (position) {
+          setPositions((prev) => ({
+            ...prev,
+            [client.id]: position,
+          }));
+        }
+      });
+    }
+
+    fetchClients();
+  }, []);
+
+  async function getPosition(street, number) {
+    const address = `${street}, ${number}`;
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.length > 0) {
+        return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+      }
+    } else {
+      alert('Erro na requisição.');
+    }
+    return null;
+  }
 
   return (
     <>
@@ -37,17 +74,23 @@ export function Map() {
           <MapContainer 
             center={[-3.71722, -38.54337]}
             zoom={13} 
-            scrollWheelZoom={false} 
+            scrollWheelZoom={true} 
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker 
-              position={[-3.71722, -38.54337]}
-              icon={customIcon}
-              eventHandlers={{ click: handleMarkerClick }}
-            />
+            {clients.map((item) => {
+              const position = positions[item.id];
+              return position ? (
+                <Marker 
+                  key={item.id}
+                  position={position}
+                  icon={customIcon}
+                  eventHandlers={{ click: () => handleMarkerClick(item.id) }}
+                />
+              ) : null;
+            })}
           </MapContainer>
         </MapWrapper>
 
@@ -55,6 +98,7 @@ export function Map() {
           <Modal 
             isOpen={isModalOpen}
             onClose={closeModal}
+            clientId={clientId}
           />}
       </Content>
     </>

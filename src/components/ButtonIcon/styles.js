@@ -4,7 +4,7 @@ export const Container = styled.button`
   width: 56px;
   height: 56px;
 
-  background: none;
+  background: white;
   color: ${({theme}) => theme.COLORS.BACKGROUND_900};
 
   border: 0;
