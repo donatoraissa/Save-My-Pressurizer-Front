@@ -13,6 +13,7 @@ Este projeto faz parte do trabalho de conclusão de curso (TCC) "Save My Pressur
 - **React Modal**: Para exibir modais e janelas de diálogo.
 - **React Leaflet**: Para exibir mapas interativos dentro da aplicação.
 - **React Geocode**: Para conversão de coordenadas geográficas em endereços, auxiliando na localização dos pressurizadores.
+- **React Hooks**: Utilizados para gerenciamento de estado e ciclo de vida dos componentes.
 - **Axios**: Para conexão com o backend e realização de requisições HTTP.
 
 ## Funcionalidades
@@ -50,9 +51,12 @@ O aplicativo será iniciado em [http://localhost:3000](http://localhost:3000).
 ```bash
 src/
 │
+├── assets/        # Arquivos estáticos (imagens)
 ├── components/    # Componentes reutilizáveis
+├── hooks/         # Custom hooks
 ├── pages/         # Páginas da aplicação
+├── routes/        # Definições de rotas
 ├── services/      # Conexão com o backend e APIs
 ├── styles/        # Estilos globais e customizados
-├── validations/   # Esquemas de validação usando Zod
-└── App.jsx        # Componente principal da aplicação
+└── utils/         # Funções utilitárias
+└── main.jsx        # Componente principal da aplicação
