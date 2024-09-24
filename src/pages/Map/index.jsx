@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Navbar } from '../../components/Navbar';
-import { Content, MapWrapper } from './styles';
+import { Container, Content, MapWrapper } from './styles';
 import { Modal } from '../../components/Modal';
 import { api } from '../../services/api';
 
@@ -67,7 +67,7 @@ export function Map() {
   }
 
   return (
-    <>
+    <Container>
       <Navbar />
       <Content>
         <MapWrapper>
@@ -101,6 +101,6 @@ export function Map() {
             clientId={clientId}
           />}
       </Content>
-    </>
+    </Container>
   );
 }

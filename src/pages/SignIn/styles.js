@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { breakpoints } from "../../styles/breakpoints";
 
 export const Container = styled.div`
   height: 100vh;
@@ -39,6 +40,27 @@ export const Form = styled.form`
     margin-bottom: 20px;
     color: red;
   }
+
+  @media ${breakpoints.bigMobile}{
+    width: 400px;
+    height: fit-content;
+    padding: 60px;  
+  }
+
+  @media ${breakpoints.smlMobile}{
+    width: 300px;
+    height: 500px;
+    padding: 40px;
+
+    > h1 {
+      font-size: 36px;
+    }
+
+    > h2 {
+      font-size: 24px;
+      margin: 30px 0;
+    }
+  }
 `;
 
 export const Footer = styled.div`
@@ -56,5 +78,9 @@ export const Footer = styled.div`
   > a {
     color: ${({ theme }) => theme.COLORS.BACKGROUND_900};
     font-weight: 700;
+  }
+
+  @media ${breakpoints.smlMobile}{
+    flex-direction: column;
   }
 `;
