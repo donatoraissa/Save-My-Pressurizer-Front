@@ -72,7 +72,7 @@ export function Map() {
       <Content>
         <MapWrapper>
           <MapContainer 
-            center={[-3.71722, -38.54337]}
+            center={[-3.7763, -38.5322]}
             zoom={13} 
             scrollWheelZoom={true} 
           >
