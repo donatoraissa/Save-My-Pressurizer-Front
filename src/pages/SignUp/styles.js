@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { breakpoints } from "../../styles/breakpoints";
 
 export const Container = styled.div`
   height: 100vh;
@@ -40,6 +41,27 @@ export const Form = styled.form`
     align-items: flex-start;
     margin-bottom: 15px;
     color: ${({ theme }) => theme.COLORS.RED};
+  }
+  
+  @media ${breakpoints.bigMobile}{
+    width: 400px;
+    height: fit-content;
+    padding: 60px;  
+  }
+
+  @media ${breakpoints.smlMobile}{
+    width: 300px;
+    height: 600px;
+    padding: 40px;
+    
+    > h1 {
+      font-size: 36px;
+    }
+
+    > h2 {
+      font-size: 24px;
+      margin: 30px 0;
+    }
   }
 `;
 
