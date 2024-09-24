@@ -32,6 +32,13 @@ export const Form = styled.form`
     font-size: 24px;
     margin: 48px 0;
   }
+
+  > p {
+    display: flex;
+    align-self: baseline;
+    margin-bottom: 20px;
+    color: red;
+  }
 `;
 
 export const Footer = styled.div`

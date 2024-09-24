@@ -58,7 +58,7 @@ export function SignUp() {
           {...register("name")}
         />
         {errors.name && (
-          <p style={{ color: 'red' }}>
+          <p>
             {errors.name.message}
           </p>
         )}
@@ -69,7 +69,7 @@ export function SignUp() {
           {...register("email")}
         />
         {errors.email && (
-          <p style={{ color: 'red' }}>
+          <p>
             {errors.email.message}
           </p>
         )}
@@ -81,7 +81,7 @@ export function SignUp() {
           {...register("password")}
         />
         {errors.password && (
-          <p style={{ color: 'red' }}>
+          <p>
             {errors.password.message}
           </p>
         )}  
@@ -92,7 +92,7 @@ export function SignUp() {
           {...register("confirm_password")}
         />
         {errors.confirm_password && (
-          <p style={{ color: 'red' }}>
+          <p>
             {errors.confirm_password.message}
           </p>
         )}  

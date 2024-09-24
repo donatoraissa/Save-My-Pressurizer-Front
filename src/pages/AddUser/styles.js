@@ -45,4 +45,8 @@ export const ContentForm = styled.form`
 export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
+
+  > p {
+    color: red;
+  }
 `
