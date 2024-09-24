@@ -9,18 +9,31 @@ import { Button } from '../../components/Button';
 
 import { useAuth } from '../../hooks/auth';
 
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+
+const signInSchema = z.object({
+  email: z.string().email("Insira um e-mail válido!"),
+  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres!"),
+})
+
 export function SignIn() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(signInSchema)
+  });
+
   const { signIn } = useAuth();
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-
-  function handleSignIn() {
+  function handleSignIn(data) {
+    const { email, password } = data;
+    
     signIn({email, password})
   }
+
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handleSubmit(handleSignIn)}>
         <h1>Save My Pressurizer</h1>
 
         <h2>Faça seu login</h2>
@@ -29,16 +42,26 @@ export function SignIn() {
           placeholder='E-mail'
           type="text"
           icon={FiMail}
-          onChange={e => setEmail(e.target.value)}
+          {...register("email")}
         />
+        {errors.email && (
+          <p>
+            {errors.email.message}
+          </p>
+        )}
         <Input
           placeholder='Senha'
           type="password"
           icon={FiLock}
-          onChange={e => setPassword(e.target.value)}
+          {...register("password")}
         />
+        {errors.password && (
+          <p>
+            {errors.password.message}
+          </p>
+        )}
 
-        <Button title='Entrar' onClick={handleSignIn}/>
+        <Button title='Entrar' type='submit' />
 
         <Footer>
           <p>Não tem uma conta?</p>

@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from "react-hook-form";
 
 import cep from "cep-promise";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const addUserSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório!"),
@@ -113,7 +113,7 @@ export function AddUser() {
               {...register("name")}
             />
             {errors.name && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.name.message}
               </p>
             )}
@@ -126,7 +126,7 @@ export function AddUser() {
               {...register("cep")}
             />
             {errors.cep && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.cep.message}
               </p>
             )}
@@ -139,7 +139,7 @@ export function AddUser() {
               {...register("lastName")}
             />
             {errors.lastName && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.lastName.message}
               </p>
             )}
@@ -152,7 +152,7 @@ export function AddUser() {
               {...register("street")}
             />
             {errors.street && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.street.message}
               </p>
             )}
@@ -165,7 +165,7 @@ export function AddUser() {
               {...register("cpf")}
             />
             {errors.cpf && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.cpf.message}
               </p>
             )}
@@ -179,7 +179,7 @@ export function AddUser() {
               {...register("addressNumber")}
             />
             {errors.addressNumber && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.addressNumber.message}
               </p>
             )}
@@ -193,7 +193,7 @@ export function AddUser() {
               {...register("email")}
             />
             {errors.email && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.email.message}
               </p>
             )}
@@ -205,6 +205,11 @@ export function AddUser() {
               height="80px"
               {...register("complement")}
             />
+            {errors.complement && (
+              <p>
+                {errors.complement.message}
+              </p>
+            )}
           </InputWrapper>
           <InputWrapper>
             <Input
@@ -215,7 +220,7 @@ export function AddUser() {
               {...register("phoneNumber")}
             />
             {errors.phoneNumber && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.phoneNumber.message}
               </p>
             )}
@@ -229,7 +234,7 @@ export function AddUser() {
               {...register("installationDate")}
             />
             {errors.installationDate && (
-              <p style={{ color: 'red' }}>
+              <p>
                 {errors.installationDate.message}
               </p>
             )}
