@@ -13,6 +13,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from "react-hook-form";
 
+import cep from "cep-promise";
+import { useEffect, useState } from "react";
+
 const addUserSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório!"),
   cep: z.string().refine((val) => val.length === 8, {
@@ -36,11 +39,29 @@ const addUserSchema = z.object({
 
 
 export function AddUser() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, setValue, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(addUserSchema)
   });
 
   const navigate = useNavigate();
+
+  const postalCode = watch('cep');
+
+  async function getAddress() {
+    if (postalCode && postalCode.length === 8) {
+      try {
+        const response = await cep(postalCode);
+        setValue('street', response.street);
+        console.log(response.street);
+      } catch (error) {
+        alert('Erro ao buscar o CEP');
+      }
+    }
+  }
+
+  useEffect(() => {
+    getAddress();
+  }, [postalCode]);
 
   async function handleAddNewClient(data) {
     const {
@@ -124,7 +145,7 @@ export function AddUser() {
             )}
           </InputWrapper>
           <InputWrapper>
-            <Input
+          <Input
               placeholder='Rua'
               icon={FiMapPin}
               height="80px"
