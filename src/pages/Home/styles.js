@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { breakpoints } from "../../styles/breakpoints";
 
 import backgroundImg from '../../assets/background.png';
 
@@ -11,7 +12,7 @@ export const Content = styled.div`
 
 export const Questions = styled.div`
   padding: 50px 136px;
-  width: 50%;
+  width: 60%;
 
   display: flex;
   flex-direction: column;
@@ -32,6 +33,14 @@ export const Questions = styled.div`
       color: ${({ theme }) => theme.COLORS.WHITE};
       margin-bottom: 20px;
     }
+  }
+
+  @media ${breakpoints.bigMobile}{
+    width: 60%;
+  }
+
+  @media ${breakpoints.smlMobile}{
+    width: 70%;
   }
 `;
 

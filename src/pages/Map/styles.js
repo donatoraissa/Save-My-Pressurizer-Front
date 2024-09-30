@@ -1,5 +1,22 @@
 import styled from 'styled-components';
 
+export const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+  
+  display: grid;
+  grid-template-rows: 105px auto;
+  grid-template-areas: 
+  "navbar"
+  "content";
+
+  > main {
+    grid-area: content;
+    overflow-y: auto;
+    padding: 150px 80px;;
+  }
+`;
+
 export const Content = styled.div`
   width: 100%;
   height: calc(100vh - 105px);
