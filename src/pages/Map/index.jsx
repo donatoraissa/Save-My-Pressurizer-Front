@@ -5,12 +5,12 @@ import L from 'leaflet';
 import { Navbar } from '../../components/Navbar';
 import { Content, MapWrapper } from './styles';
 import { Modal } from '../../components/Modal';
-import { api } from '../../services/api';
+import { api, socket } from '../../services/api';
 
 const customIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="#ff0000" />
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill=${getColor(pressurizerState)} />
     </svg>
   `),
   iconSize: [60, 60],
@@ -18,8 +18,19 @@ const customIcon = new L.Icon({
   popupAnchor: [0, -24],
 });
 
+function getColor(pressurizerState) {
+  const state = pressurizerState.state
+  if (state === "ON") {
+    return "#008000	"
+  } else if (state === "OFF") {
+    return "#FF002E"
+  } else if (state === "BLOCKED") {
+    return "#FFFF00"
+  }
+}
 export function Map() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pressurizerState, setPressurizerState] = useState(false);
   const [clients, setClients] = useState([]);
   const [clientId, setClientId] = useState(null);
   const [positions, setPositions] = useState({});
@@ -36,6 +47,11 @@ export function Map() {
   useEffect(() => {
     async function fetchClients() {
       const response = await api.get('/clientes');
+      socket.addEventListener("message", event => {
+        console.log("message: " + event.data)
+        const data = JSON.parse(event.data)
+        setPressurizerState(data)
+      });
       setClients(response.data);
       response.data.forEach(async (client) => {
         const position = await getPosition(client.street, client.number);
@@ -71,10 +87,11 @@ export function Map() {
       <Navbar />
       <Content>
         <MapWrapper>
-          <MapContainer 
+          <h1>{pressurizerState}</h1>
+          <MapContainer
             center={[-3.7763, -38.5322]}
-            zoom={13} 
-            scrollWheelZoom={true} 
+            zoom={13}
+            scrollWheelZoom={true}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -83,7 +100,7 @@ export function Map() {
             {clients.map((item) => {
               const position = positions[item.id];
               return position ? (
-                <Marker 
+                <Marker
                   key={item.id}
                   position={position}
                   icon={customIcon}
@@ -94,8 +111,8 @@ export function Map() {
           </MapContainer>
         </MapWrapper>
 
-        {isModalOpen && 
-          <Modal 
+        {isModalOpen &&
+          <Modal
             isOpen={isModalOpen}
             onClose={closeModal}
             clientId={clientId}
