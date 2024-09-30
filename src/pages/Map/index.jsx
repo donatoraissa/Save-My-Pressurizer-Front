@@ -87,7 +87,7 @@ export function Map() {
       <Navbar />
       <Content>
         <MapWrapper>
-          <h1>{pressurizerState}</h1>
+          <h1>state: {pressurizerState}</h1>
           <MapContainer
             center={[-3.7763, -38.5322]}
             zoom={13}

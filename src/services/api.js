@@ -6,4 +6,4 @@ export const api = axios.create({
   baseURL: "https://" + uri
 })
 
-export const socket = new WebSocket("ws://" + uri)
+export const socket = new WebSocket("wss://" + uri)
