@@ -1,10 +1,10 @@
 export function getStatusColor(status) {
   switch(status.toUpperCase()) {
-      case 'LIGADO':
+      case 'ON':
           return 'green';
-      case 'DESLIGADO':
+      case 'OFF':
           return 'red';
-      case 'BLOQUEADO':
-          return 'gray';
+      case 'BLOCKED':
+          return 'yellow';
   } 
 }
