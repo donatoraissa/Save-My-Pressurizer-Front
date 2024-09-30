@@ -1,4 +1,5 @@
 import { Backgroung, Content, Questions } from "./styles";
+import React, { useEffect, useState } from 'react';
 
 import { Container } from "../AddUser/styles";
 import { Navbar } from "../../components/Navbar";
