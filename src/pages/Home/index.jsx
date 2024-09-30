@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Container } from "../AddUser/styles";
 import { Navbar } from "../../components/Navbar";
+import { api } from '../../services/api';
 
 export function Home() {
   const [mqttData, setmqttData] = useState(null);
