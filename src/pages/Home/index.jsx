@@ -4,6 +4,16 @@ import { Container } from "../AddUser/styles";
 import { Navbar } from "../../components/Navbar";
 
 export function Home() {
+  const [mqttData, setmqttData] = useState(null);
+
+  useEffect(() => {
+    async function fetchMqtt() {
+      const response = await api.get(`/pressurizers`);
+      setmqttData(response)
+    }
+
+    fetchMqtt();
+  }, [])
   return (
     <Container>
       <Navbar />
@@ -12,6 +22,7 @@ export function Home() {
 
         <Questions>
           <div>
+            <h1>mqttData: {mqttData}</h1>
             <h1>QUEM SOMOS NÓS?</h1>
             <p>
               Somos um grupo de alunos do IFCE Fortaleza,

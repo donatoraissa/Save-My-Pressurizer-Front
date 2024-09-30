@@ -1,6 +1,4 @@
 import { Container, ContentForm, InputWrapper } from "./styles";
-import InputMask from 'react-input-mask';
-
 
 import { Input } from "../../components/Input";
 import { Navbar } from "../../components/Navbar";
@@ -20,17 +18,17 @@ import { useEffect } from "react";
 
 const addUserSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório!"),
-  cep: z.string().refine((val) => val.replace(/\D/g, '').length === 8, {
+  cep: z.string().refine((val) => val.length === 8, {
     message: "O CEP precisa ter 8 dígitos!"
   }),
   lastName: z.string().min(1, "O sobrenome é obrigatório!"),
   street: z.string().min(1, "A rua é obrigatória!"),
-  cpf: z.string().refine((val) => val.replace(/\D/g, '').length === 11, {
+  cpf: z.string().refine((val) => val.length === 11, {
     message: "O CPF precisa ter 11 dígitos!"
   }),
   addressNumber: z.string().min(1, "O número da residência é obrigatório!"),
   email: z.string().email("Insira um e-mail válido!"),
-  phoneNumber: z.string().refine((val) => val.replace(/\D/g, '').length === 11, {
+  phoneNumber: z.string().refine((val) => val.length === 11, {
     message: "O número de telefone precisa ter 11 dígitos!"
   }),
   complement: z.string().min(1, "O complemento é obrigatório!"),
@@ -38,7 +36,6 @@ const addUserSchema = z.object({
     message: "Insira uma data válida!"
   }),
 });
-
 
 
 export function AddUser() {
@@ -51,12 +48,9 @@ export function AddUser() {
   const postalCode = watch('cep');
 
   async function getAddress() {
-    
-    const cleanPostalCode = postalCode.replace(/\D/g, '');
-  
-    if (cleanPostalCode && cleanPostalCode.length === 8) {
+    if (postalCode && postalCode.length === 8) {
       try {
-        const response = await cep(cleanPostalCode);
+        const response = await cep(postalCode);
         setValue('street', response.street);
         console.log(response.street);
       } catch (error) {
@@ -64,8 +58,6 @@ export function AddUser() {
       }
     }
   }
-  
-  
 
   useEffect(() => {
     getAddress();
@@ -127,16 +119,17 @@ export function AddUser() {
             )}
           </InputWrapper>
           <InputWrapper>
-          <InputMask
-            mask="99999-999"
-            placeholder='CEP'
-            icon={FiMap}
-            height="80px"
-            {...register("cep")}
-          >
-            {(inputProps) => <Input {...inputProps} />}
-          </InputMask>
-            {errors.cep && <p>{errors.cep.message}</p>}
+            <Input
+              placeholder='CEP'
+              icon={FiMap}
+              height="80px"
+              {...register("cep")}
+            />
+            {errors.cep && (
+              <p>
+                {errors.cep.message}
+              </p>
+            )}
           </InputWrapper>
           <InputWrapper>
             <Input
@@ -165,16 +158,17 @@ export function AddUser() {
             )}
           </InputWrapper>
           <InputWrapper>
-            <InputMask
-              mask="999.999.999-99"
+            <Input
               placeholder='CPF'
               icon={FiUser}
               height="80px"
               {...register("cpf")}
-            >
-              {(inputProps) => <Input {...inputProps} />}
-           </InputMask>
-           {errors.cpf && <p>{errors.cpf.message}</p>}
+            />
+            {errors.cpf && (
+              <p>
+                {errors.cpf.message}
+              </p>
+            )}
           </InputWrapper>
           <InputWrapper>
             <Input
@@ -218,16 +212,18 @@ export function AddUser() {
             )}
           </InputWrapper>
           <InputWrapper>
-          <InputMask
-            mask="(99) 99999-9999"
-            placeholder='Telefone'
-            icon={FiPhone}
-            height="80px"
-            {...register("phoneNumber")}
-          >
-            {(inputProps) => <Input {...inputProps} />}
-          </InputMask>
-          {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}
+            <Input
+              placeholder='Telefone'
+              type="number"
+              icon={FiPhone}
+              height="80px"
+              {...register("phoneNumber")}
+            />
+            {errors.phoneNumber && (
+              <p>
+                {errors.phoneNumber.message}
+              </p>
+            )}
           </InputWrapper>
           <InputWrapper>
             <Input
