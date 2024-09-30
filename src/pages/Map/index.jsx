@@ -7,19 +7,9 @@ import { Container, Content, MapWrapper } from './styles';
 import { Modal } from '../../components/Modal';
 import { api, socket } from '../../services/api';
 
-const customIcon = new L.Icon({
-  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="" />
-    </svg>
-  `),
-  iconSize: [60, 60],
-  iconAnchor: [12, 24],
-  popupAnchor: [0, -24],
-});
 
 function getColor(pressurizerState) {
-  const state = pressurizerState.state
+  const state = pressurizerState.status
   if (state === "ON") {
     return "#008000	"
   } else if (state === "OFF") {
@@ -44,12 +34,24 @@ export function Map() {
     setIsModalOpen(false);
   };
 
+  let customIcon
   useEffect(() => {
     async function fetchClients() {
       const response = await api.get('/clientes');
       socket.addEventListener("message", event => {
         console.log("message: " + event.data)
         const data = JSON.parse(event.data)
+
+        customIcon = new L.Icon({
+          iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="${getColor(data)}" />
+            </svg>
+          `),
+          iconSize: [60, 60],
+          iconAnchor: [12, 24],
+          popupAnchor: [0, -24],
+        });
         setPressurizerState(data)
       });
       setClients(response.data);
@@ -87,7 +89,7 @@ export function Map() {
       <Navbar />
       <Content>
         <MapWrapper>
-          <h1>state: {pressurizerState}</h1>
+
           <MapContainer
             center={[-3.7763, -38.5322]}
             zoom={13}
