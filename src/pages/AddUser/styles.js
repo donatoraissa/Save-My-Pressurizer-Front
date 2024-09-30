@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { breakpoints } from "../../styles/breakpoints";
 
 export const Container = styled.div`
   width: 100%;
@@ -10,16 +11,13 @@ export const Container = styled.div`
   "navbar"
   "content";
 
-  > main {
-    grid-area: content;
-    overflow-y: auto;
-    padding: 150px 80px;;
-  }
+  
 `;
 
 export const ContentForm = styled.form`
   max-width: 550px;
-  margin: 0 auto;
+  margin: auto;
+  padding: 50px 30px;
 
   display: grid;
   grid-template-columns: repeat(2, 450px);
@@ -38,6 +36,35 @@ export const ContentForm = styled.form`
 
     > div:nth-child(1) {
     margin-top: 24px;
+    }
+  }
+
+  @media ${breakpoints.tablet}{
+    grid-template-columns: repeat(2, 300px);
+    grid-template-rows: repeat(5, fit-content);
+
+    > footer {
+      width: 650px;
+    }
+  }
+
+  @media ${breakpoints.bigMobile}{
+    grid-template-columns: repeat(1, 450px);
+    grid-template-rows: repeat(5, fit-content);
+
+    > footer {
+      width: 450px;
+    }
+  }
+
+  @media ${breakpoints.smlMobile}{
+    grid-template-columns: repeat(1, 300px);
+    grid-template-rows: repeat(5, fit-content);
+
+    gap: 30px;
+
+    > footer {
+      width: 300px;
     }
   }
 `;
