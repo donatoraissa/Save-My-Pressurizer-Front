@@ -9,7 +9,7 @@ import { api, socket } from '../../services/api';
 
 
 function getColor(pressurizerState) {
-  const state = pressurizerState.status
+  const state = pressurizerState.state
   if (state === "ON") {
     return "#008000	"
   } else if (state === "OFF") {
@@ -34,39 +34,34 @@ export function Map() {
     setIsModalOpen(false);
   };
 
-  let customIcon
+  let customIcon = new L.Icon({
+    iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="${getColor(pressurizerState)}"/>
+      </svg>
+    `),
+    iconSize: [60, 60],
+    iconAnchor: [12, 24],
+    popupAnchor: [0, -24],
+  });
   useEffect(() => {
-    async function fetchClients() {
-      const response = await api.get('/clientes');
+    async function socketApi() {
       socket.addEventListener("message", event => {
         console.log("message: " + event.data)
         const data = JSON.parse(event.data)
 
-        customIcon = new L.Icon({
-          iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="${getColor(data)}" />
-            </svg>
-          `),
-          iconSize: [60, 60],
-          iconAnchor: [12, 24],
-          popupAnchor: [0, -24],
-        });
+        customIcon.iconUrl = 'data:image/svg+xml;base64,' + btoa(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 2.57 1.69 5.2 4.2 8.03L12 21l2.8-3.97C17.31 14.2 19 11.57 19 9c0-3.87-3.13-7-7-7zm0 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill=${getColor(data)} />
+          </svg>
+        `)
+        console.log("IconUrl: " + getColor(data))
         setPressurizerState(data)
       });
-      setClients(response.data);
-      response.data.forEach(async (client) => {
-        const position = await getPosition(client.street, client.number);
-        if (position) {
-          setPositions((prev) => ({
-            ...prev,
-            [client.id]: position,
-          }));
-        }
-      });
+
     }
 
-    fetchClients();
+    socketApi();
   }, []);
 
   async function getPosition(street, number) {
