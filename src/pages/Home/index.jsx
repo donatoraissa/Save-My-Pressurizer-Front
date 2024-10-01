@@ -24,7 +24,6 @@ export function Home() {
 
         <Questions>
           <div>
-            <h1>mqttData: {mqttData}</h1>
             <h1>QUEM SOMOS NÓS?</h1>
             <p>
               Somos um grupo de alunos do IFCE Fortaleza,

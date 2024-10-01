@@ -3,27 +3,30 @@ import React, { useEffect, useState } from 'react';
 
 import { Navbar } from "../../components/Navbar";
 import { Modal } from '../../components/Modal'
-import {socket } from '../../services/api'
+import { socket } from '../../services/api'
 import { Table, TableBody, TableHead, TableRow, Button } from '@mui/material';
 
 import { api } from "../../services/api";
 
 import { formatDate } from "../../utils/formatDate";
-import { getStatusColor } from "../../utils/getStatusColor";
+import { getStatusColor, getLabelStatus } from "../../utils/getStatusColor";
 
 export function Users() {
     const [clients, setClients] = useState([]);
     const [clientId, setUserId] = useState(null);
-    const [colorState, setColorState] = useState(null);
+    const [colorState, setColorState] = useState("red");
+    const [labelStatusState, setlabelStatusState] = useState("Desligado");
     useEffect(() => {
         async function socketApi() {
+
             socket.addEventListener("message", event => {
                 console.log("message: " + event.data)
                 const data = JSON.parse(event.data)
 
-              
-                console.log("IconUrl: " + getStatusColor(data.state))
-                setColorState(getStatusColor(data.state))
+
+                console.log("IconUrl: " + getStatusColor(data.status))
+                setColorState(getStatusColor(data.status))
+                setlabelStatusState(getLabelStatus(data.status))
             });
 
         }
@@ -46,7 +49,6 @@ export function Users() {
             const response = await api.get('/clientes');
             setClients(response.data);
         }
-
         fetchClients();
     }, [])
 
@@ -83,7 +85,7 @@ export function Users() {
                                             justifyContent: 'center',
                                             alignItems: 'center'
                                         }}>
-                                            Ligado
+                                            {labelStatusState}
                                         </span>
                                     </CustomTableCell>
                                     <CustomTableCell>{`${item.first_name} ${item.last_name}`}</CustomTableCell>
