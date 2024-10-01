@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Navbar } from "../../components/Navbar";
 import { Modal } from '../../components/Modal'
-
+import {socket } from '../../services/api'
 import { Table, TableBody, TableHead, TableRow, Button } from '@mui/material';
 
 import { api } from "../../services/api";
@@ -14,7 +14,22 @@ import { getStatusColor } from "../../utils/getStatusColor";
 export function Users() {
     const [clients, setClients] = useState([]);
     const [clientId, setUserId] = useState(null);
+    const [colorState, setColorState] = useState(null);
+    useEffect(() => {
+        async function socketApi() {
+            socket.addEventListener("message", event => {
+                console.log("message: " + event.data)
+                const data = JSON.parse(event.data)
 
+              
+                console.log("IconUrl: " + getStatusColor(data.state))
+                setColorState(getStatusColor(data.state))
+            });
+
+        }
+
+        socketApi();
+    }, []);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleMarkerClick = (id) => {
@@ -41,60 +56,62 @@ export function Users() {
             <Navbar />
             <Content>
                 <CustomTableContainer>
-                <Table>
-                    <TableHead>
-                    <TableRow>
-                        <CustomTableCell>ID</CustomTableCell>
-                        <CustomTableCell>Status</CustomTableCell>
-                        <CustomTableCell>Nome</CustomTableCell>
-                        <CustomTableCell>Data de Instalação</CustomTableCell>
-                        <CustomTableCell>Ações</CustomTableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {clients.map((item) => (
-                        <TableRow key={item.id}>
-                            <CustomTableCell>{item.id}</CustomTableCell>
-                            <CustomTableCell>
-                                <span style={{ 
-                                backgroundColor: getStatusColor('ligado'), 
-                                color: '#fff', 
-                                padding: '5px 10px', 
-                                borderRadius: '5px',
-                                fontWeight: 'bold',
-                                width: '100px',
-                                height: '30px',
-                                display: 'flex', 
-                                justifyContent: 'center', 
-                                alignItems: 'center'
-                                }}>
-                                Ligado
-                                </span>
-                            </CustomTableCell>
-                            <CustomTableCell>{`${item.first_name} ${item.last_name}`}</CustomTableCell>
-                            <CustomTableCell>{formatDate(item.installation_date)}</CustomTableCell>
-                            <CustomTableCell>
-                                <Button
-                                    title="Ver Mais"
-                                    style={{ backgroundColor: '#1438B8',
-                                        color: 'white',
-                                        borderRadius: '5px',
-                                        padding: '10px 20px',
-                                        border: 'none',
-                                        cursor: 'pointer' }}
-                                    onClick={() => handleMarkerClick(item.id)}
-                                    >
-                                    Ver Mais
-                                </Button>
-                            </CustomTableCell>
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <CustomTableCell>ID</CustomTableCell>
+                                <CustomTableCell>Status</CustomTableCell>
+                                <CustomTableCell>Nome</CustomTableCell>
+                                <CustomTableCell>Data de Instalação</CustomTableCell>
+                                <CustomTableCell>Ações</CustomTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {clients.map((item) => (
+                                <TableRow key={item.id}>
+                                    <CustomTableCell>{item.id}</CustomTableCell>
+                                    <CustomTableCell>
+                                        <span style={{
+                                            backgroundColor: colorState,
+                                            color: '#fff',
+                                            padding: '5px 10px',
+                                            borderRadius: '5px',
+                                            fontWeight: 'bold',
+                                            width: '100px',
+                                            height: '30px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}>
+                                            Ligado
+                                        </span>
+                                    </CustomTableCell>
+                                    <CustomTableCell>{`${item.first_name} ${item.last_name}`}</CustomTableCell>
+                                    <CustomTableCell>{formatDate(item.installation_date)}</CustomTableCell>
+                                    <CustomTableCell>
+                                        <Button
+                                            title="Ver Mais"
+                                            style={{
+                                                backgroundColor: '#1438B8',
+                                                color: 'white',
+                                                borderRadius: '5px',
+                                                padding: '10px 20px',
+                                                border: 'none',
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={() => handleMarkerClick(item.id)}
+                                        >
+                                            Ver Mais
+                                        </Button>
+                                    </CustomTableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </CustomTableContainer>
 
-                {isModalOpen && 
-                    <Modal 
+                {isModalOpen &&
+                    <Modal
                         isOpen={isModalOpen}
                         onClose={closeModal}
                         clientId={clientId}
@@ -104,4 +121,3 @@ export function Users() {
         </Container>
     );
 }
-  
