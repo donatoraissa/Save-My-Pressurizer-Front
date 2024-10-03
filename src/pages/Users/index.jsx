@@ -117,6 +117,7 @@ export function Users() {
                         isOpen={isModalOpen}
                         onClose={closeModal}
                         clientId={clientId}
+                        status={labelStatusState}
                     />}
 
             </Content>

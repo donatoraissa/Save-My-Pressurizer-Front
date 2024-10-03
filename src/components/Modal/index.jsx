@@ -9,7 +9,7 @@ import { api } from '../../services/api';
 import { formatDate } from "../../utils/formatDate";
 import { useNavigate } from 'react-router-dom';
 
-export function Modal ({ isOpen, onClose, clientId }) {
+export function Modal ({ isOpen, onClose, clientId, status }) {
   const [clientData, setClientData] = useState(null);
 
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ export function Modal ({ isOpen, onClose, clientId }) {
             <p><strong>Telefone:</strong> {clientData.cliente.phone}</p>
             <p><strong>Endereço:</strong> {clientData.cliente.street}, {clientData.cliente.number} - {clientData.cliente.complement}</p>
             <p><strong>Data de instalação:</strong> {formatDate(clientData.cliente.installation_date)}</p>
-            <p><strong>Status:</strong> Ligado</p>
+            <p><strong>Status:</strong> {status}</p>
           </div>
         )}
 
